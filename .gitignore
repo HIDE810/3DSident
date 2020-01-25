@@ -1,0 +1,7 @@
+build/
+*.3dsx
+*.bat
+*.cia
+*.elf
+*.smdh
+*.t3x

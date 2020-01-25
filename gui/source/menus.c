@@ -20,7 +20,7 @@
 
 #define DISTANCE_Y  20
 #define MENU_Y_DIST 18
-#define MAX_ITEMS   9
+#define MAX_ITEMS   8
 
 static bool display_info = false;
 static int item_height = 0;
@@ -43,24 +43,24 @@ static void Menu_DrawItem(int x, int y, float size, char *item_title, const char
 
 static void Menu_Kernel(void)
 {
-	Menu_DrawItem(15, 102, 0.5f, "Kernel version:", kernel_version);
-	Menu_DrawItem(15, 120, 0.5f, "FIRM version:", firm_version);
-	Menu_DrawItem(15, 136, 0.5f, "System version:", system_version);
-	Menu_DrawItem(15, 156, 0.5f, "Initial system version:", initial_version);
-	Menu_DrawItem(15, 174, 0.5f, "SDMC CID:", display_info? Kernel_GetSDMCCID() : NULL);
-	Menu_DrawItem(15, 192, 0.5f, "NAND CID:", display_info? Kernel_GetNANDCID() : NULL);
-	Menu_DrawItem(15, 210, 0.5f, "Device ID:", "%lu", display_info? Kernel_GetDeviceId() : 0);
+	Menu_DrawItem(15, 30, 0.5f, "カーネルバージョン:", kernel_version);
+	Menu_DrawItem(15, 50, 0.5f, "FIRMバージョン:", firm_version);
+	Menu_DrawItem(15, 70, 0.5f, "システムバージョン:", system_version);
+	Menu_DrawItem(15, 90, 0.5f, "初期システムバージョン:", initial_version);
+	Menu_DrawItem(15, 110, 0.5f, "SDMC CID:", display_info? Kernel_GetSDMCCID() : NULL);
+	Menu_DrawItem(15, 130, 0.5f, "NAND CID:", display_info? Kernel_GetNANDCID() : NULL);
+	Menu_DrawItem(15, 150, 0.5f, "デバイスID:", "%lu", display_info? Kernel_GetDeviceId() : 0);
 }
 
 static void Menu_System(void)
 {
-	Menu_DrawItem(15, 102, 0.5f, "Model:", "%s (%s - %s)", System_GetModel(), System_GetRunningHW(), System_GetRegion());
-	Menu_DrawItem(15, 120, 0.5f, "Language:", System_GetLang());
-	Menu_DrawItem(15, 138, 0.5f, "ECS Device ID:", "%llu", display_info? System_GetSoapId() : 0);
-	Menu_DrawItem(15, 156, 0.5f, "Original local friend code seed:", "%010llX", display_info? System_GetLocalFriendCodeSeed() : 0);
-	Menu_DrawItem(15, 174, 0.5f, "NAND local friend code seed:", "%s", display_info? nand_lfcs : NULL);
-	Menu_DrawItem(15, 192, 0.5f, "MAC Address:", display_info? System_GetMacAddress() : NULL);
-	Menu_DrawItem(15, 210, 0.5f, "Serial number:", display_info? System_GetSerialNumber() : NULL);
+	Menu_DrawItem(15, 30, 0.5f, "モデル:", "%s (%s - %s)", System_GetModel(), System_GetRunningHW(), System_GetRegion());
+	Menu_DrawItem(15, 50, 0.5f, "言語:", System_GetLang());
+	Menu_DrawItem(15, 70, 0.5f, "ECSデバイスID:", "%llu", display_info? System_GetSoapId() : 0);
+	Menu_DrawItem(15, 90, 0.5f, "オリジナルLFCS:", "%010llX", display_info? System_GetLocalFriendCodeSeed() : 0);
+	Menu_DrawItem(15, 110, 0.5f, "NAND LFCS:", "%s", display_info? nand_lfcs : NULL);
+	Menu_DrawItem(15, 130, 0.5f, "MACアドレス:", display_info? System_GetMacAddress() : NULL);
+	Menu_DrawItem(15, 150, 0.5f, "シリアルナンバー:", display_info? System_GetSerialNumber() : NULL);
 }
 
 static void Menu_Battery(void)
@@ -70,25 +70,25 @@ static void Menu_Battery(void)
 	bool is_connected = false;
 
 	ret = MCUHWC_GetBatteryLevel(&battery_percent);
-	Menu_DrawItem(15, 102, 0.5f, "Battery percentage:", "%3d%%", R_FAILED(ret)? 0 : (battery_percent));
+	Menu_DrawItem(15, 30, 0.5f, "バッテリー残量:", "%3d%%", R_FAILED(ret)? 0 : (battery_percent));
 	
 	ret = PTMU_GetBatteryChargeState(&battery_status);
-	Menu_DrawItem(15, 120, 0.5f, "Battery status:", R_FAILED(ret)? NULL : (battery_status? "charging" : "not charging"));
+	Menu_DrawItem(15, 50, 0.5f, "バッテリー状態:", R_FAILED(ret)? NULL : (battery_status? "充電中" : "通常"));
 	
 	if (R_FAILED(ret = MCUHWC_GetBatteryVoltage(&battery_volt)))
-		Menu_DrawItem(15, 136, 0.5f, "Battery voltage:", "%d (%.1f V)", 0, 0);
+		Menu_DrawItem(15, 70, 0.5f, "バッテリー電圧:", "%d (%.1f V)", 0, 0);
 	else
-		Menu_DrawItem(15, 136, 0.5f, "Battery voltage:", "%d (%.1f V)", battery_volt, 5.0 * ((double)battery_volt / 256.0));
+		Menu_DrawItem(15, 70, 0.5f, "バッテリー電圧:", "%d (%.1f V)", battery_volt, 5.0 * ((double)battery_volt / 256.0));
 
 	ret = PTMU_GetAdapterState(&is_connected);
-	Menu_DrawItem(15, 156, 0.5f, "Adapter state:", R_FAILED(ret)? NULL : (is_connected? "connected" : "disconnected"));
+	Menu_DrawItem(15, 90, 0.5f, "アダプター状態:", R_FAILED(ret)? NULL : (is_connected? "接続中" : "未接続"));
 
 	if ((R_SUCCEEDED(MCUHWC_GetFwVerHigh(&fw_ver_high))) && (R_SUCCEEDED(MCUHWC_GetFwVerLow(&fw_ver_low))))
-		Menu_DrawItem(15, 174, 0.5f, "MCU firmware:", "%u.%u", (fw_ver_high - 0x10), fw_ver_low);
+		Menu_DrawItem(15, 110, 0.5f, "MCUファームウェア:", "%u.%u", (fw_ver_high - 0x10), fw_ver_low);
 	else
-		Menu_DrawItem(15, 174, 0.5f, "MCU firmware:", "0.0");
+		Menu_DrawItem(15, 110, 0.5f, "MCUファームウェア:", "0.0");
 
-	Menu_DrawItem(15, 192, 0.5f, "Power-saving mode:", Config_IsPowerSaveEnabled()? "enabled" : "disabled");
+	Menu_DrawItem(15, 130, 0.5f, "省電力モード:", Config_IsPowerSaveEnabled()? "ON" : "OFF");
 }
 
 static void Menu_NNID(void)
@@ -101,19 +101,19 @@ static void Menu_NNID(void)
 	char country[0x3], name[0x16], nnid[0x11], timeZone[0x41];
 	
 	ret = ACTU_GetAccountDataBlock(nnid, 0x11, 0x8);
-	Menu_DrawItem(15, 102, 0.5f, "NNID:", R_FAILED(ret)? NULL : (display_info? nnid : NULL));
+	Menu_DrawItem(15, 30, 0.5f, "NNID:", R_FAILED(ret)? NULL : (display_info? nnid : NULL));
 
 	ret = ACTU_GetAccountDataBlock(&principalID, 0x4, 0xC);
-	Menu_DrawItem(15, 120, 0.5f, "Principal ID:", "%u", R_FAILED(ret)? 0 : (display_info? principalID : 0));
+	Menu_DrawItem(15, 50, 0.5f, "Principal ID:", "%u", R_FAILED(ret)? 0 : (display_info? principalID : 0));
 
-	Menu_DrawItem(15, 136, 0.5f, "Persistent ID:", "%u", R_FAILED(accountDataBlockRet)? 0 : (display_info? accountDataBlock.persistentID : 0));
-	Menu_DrawItem(15, 156, 0.5f, "Transferable ID Base:", "%llu", R_FAILED(accountDataBlockRet)? 0 : (display_info? accountDataBlock.transferableID : 0));
+	Menu_DrawItem(15, 70, 0.5f, "Persistent ID:", "%u", R_FAILED(accountDataBlockRet)? 0 : (display_info? accountDataBlock.persistentID : 0));
+	Menu_DrawItem(15, 90, 0.5f, "Transferable ID Base:", "%llu", R_FAILED(accountDataBlockRet)? 0 : (display_info? accountDataBlock.transferableID : 0));
 	
 	ret = ACTU_GetAccountDataBlock(country, 0x3, 0xB);
-	Menu_DrawItem(15, 174, 0.5f, "Country:", R_FAILED(ret)? NULL : (display_info? country : NULL));
+	Menu_DrawItem(15, 110, 0.5f, "国:", R_FAILED(ret)? NULL : (display_info? country : NULL));
 	
 	ret = ACTU_GetAccountDataBlock(timeZone, 0x41, 0x1E);
-	Menu_DrawItem(15, 192, 0.5f, "Time Zone:", R_FAILED(ret)? NULL : (display_info? timeZone : NULL));
+	Menu_DrawItem(15, 130, 0.5f, "タイムゾーン:", R_FAILED(ret)? NULL : (display_info? timeZone : NULL));
 }
 
 static void Menu_Config(void)
@@ -121,54 +121,53 @@ static void Menu_Config(void)
 	char username[0x14];
 	wcstombs(username, Config_GetUsername(), sizeof(username));
 
-	Menu_DrawItem(15, 102, 0.5f, "Username: ", username);
-	Menu_DrawItem(15, 120, 0.5f, "Birthday:", display_info? Config_GetBirthday() : NULL);
-	Menu_DrawItem(15, 136, 0.5f, "EULA version:", Config_GetEulaVersion());
-	Menu_DrawItem(15, 156, 0.5f, "Parental control pin:", display_info? Config_GetParentalPin() : NULL);
-	Menu_DrawItem(15, 174, 0.5f, "Parental control e-mail:", display_info? Config_GetParentalEmail() : NULL);
-	Menu_DrawItem(15, 192, 0.5f, "Parental control answer:", display_info? Config_GetParentalSecretAnswer() : NULL);
+	Menu_DrawItem(15, 30, 0.5f, "ユーザー名: ", username);
+	Menu_DrawItem(15, 50, 0.5f, "誕生日:", display_info? Config_GetBirthday() : NULL);
+	Menu_DrawItem(15, 70, 0.5f, "EULAバージョン:", Config_GetEulaVersion());
+	Menu_DrawItem(15, 90, 0.5f, "ペアレンタルコントロール キー:", display_info? Config_GetParentalPin() : NULL);
+	Menu_DrawItem(15, 110, 0.5f, "ペアレンタルコントロール メールアドレス:", display_info? Config_GetParentalEmail() : NULL);
+	Menu_DrawItem(15, 130, 0.5f, "ペアレンタルコントロール 秘密の質問の答え:", display_info? Config_GetParentalSecretAnswer() : NULL);
 }
 
 static void Menu_Hardware(void)
 {
 	Result ret = 0;
 
-	Menu_DrawItem(15, 102, 0.5f, "Screen type:", System_GetScreenType());
-	Menu_DrawItem(15, 120, 0.5f, "Headphone status:", Hardware_GetAudioJackStatus());
-	Menu_DrawItem(15, 136, 0.5f, "Card slot status:", Hardware_GetCardSlotStatus());
-	Menu_DrawItem(15, 156, 0.5f, "SDMC status:", Hardware_DetectSD());
-
-	Menu_DrawItem(15, 174, 0.5f, "Sound output:", Config_GetSoundOutputMode());
+	Menu_DrawItem(15, 30, 0.5f, "スクリーンタイプ:", System_GetScreenType());
+	Menu_DrawItem(15, 50, 0.5f, "ヘッドフォン:", Hardware_GetAudioJackStatus());
+	Menu_DrawItem(15, 70, 0.5f, "カードスロット:", Hardware_GetCardSlotStatus());
+	Menu_DrawItem(15, 90, 0.5f, "SDカード:", Hardware_DetectSD());
+	Menu_DrawItem(15, 110, 0.5f, "音声出力:", Config_GetSoundOutputMode());
 
 	if (Utils_IsN3DS())
 	{
-		Menu_DrawItem(15, 192, 0.5f, "Brightness level:", "%s (auto-brightness mode %s)", Hardware_GetBrightness(GSPLCD_SCREEN_TOP), 
-			Config_IsAutoBrightnessEnabled()? "enabled" : "disabled");
+		Menu_DrawItem(15, 130, 0.5f, "明るさレベル:", "%s (明るさ自動調整 %s)", Hardware_GetBrightness(GSPLCD_SCREEN_TOP), 
+			Config_IsAutoBrightnessEnabled()? "ON" : "OFF");
 	}
 	else
-		Menu_DrawItem(15, 192, 0.5f, "Brightness level:", Hardware_GetBrightness(GSPLCD_SCREEN_TOP));
+		Menu_DrawItem(15, 130, 0.5f, "明るさレベル:", Hardware_GetBrightness(GSPLCD_SCREEN_TOP));
 
 }
 
 static void Menu_Misc(void)
 {
 	Result ret = 0;
-	Menu_DrawItem(15, 102, 0.5f, "Installed titles:", "SD: %lu (NAND: %lu)", sd_titles, nand_titles);
-	Menu_DrawItem(15, 120, 0.5f, "Installed tickets:", "%lu", tickets);
+	Menu_DrawItem(15, 30, 0.5f, "インストール済タイトル:", "SD: %lu (NAND: %lu)", sd_titles, nand_titles);
+	Menu_DrawItem(15, 50, 0.5f, "インストール済チケット:", "%lu", tickets);
 
 	u64 homemenuID = 0;
 	ret = APT_GetAppletInfo(APPID_HOMEMENU, &homemenuID, NULL, NULL, NULL, NULL);
-	Menu_DrawItem(15, 136, 0.5f, "Homemenu ID:", "%016llX", (R_FAILED(ret))? ret : homemenuID);
+	Menu_DrawItem(15, 70, 0.5f, "ホームメニューID:", "%016llX", (R_FAILED(ret))? ret : homemenuID);
 
 	double wifi_signal_percent = (osGetWifiStrength() * 33.3333333333);
-	Menu_DrawItem(15, 156, 0.5f, "WiFi signal strength:", "%d (%.0lf%%)", osGetWifiStrength(), wifi_signal_percent);
+	Menu_DrawItem(15, 90, 0.5f, "WiFi受信強度:", "%d (%.0lf%%)", osGetWifiStrength(), wifi_signal_percent);
 	
 	char hostname[128];
 	ret = gethostname(hostname, sizeof(hostname));
 	if (display_info)
-		Menu_DrawItem(15, 174, 0.5f, "IP:", hostname);
+		Menu_DrawItem(15, 110, 0.5f, "IP:", hostname);
 	else
-		Menu_DrawItem(15, 174, 0.5f, "IP:", NULL);
+		Menu_DrawItem(15, 110, 0.5f, "IP:", NULL);
 
 }
 
@@ -184,21 +183,21 @@ static void Menu_WiFi(void)
 		Draw_Rect(15, 27, 370, 70, MENU_INFO_TITLE_COLOUR);
 		Draw_Rect(16, 28, 368, 68, MENU_BAR_COLOUR);
 		
-		Draw_Text(20, 30, 0.45f, MENU_INFO_DESC_COLOUR, "WiFi Slot 1:");
+		Draw_Text(20, 30, 0.45f, MENU_INFO_DESC_COLOUR, "WiFiスロット 1:");
 
 		if (R_SUCCEEDED(ACI_GetSSID(ssid)))
 			Menu_DrawItem(20, 46, 0.45f, "SSID:", ssid);
 		
 		if (R_SUCCEEDED(ACI_GetPassphrase(passphrase)))
-			Menu_DrawItem(20, 62, 0.45f, "Pass:", "%s (%s)", display_info? passphrase : NULL, WiFi_GetSecurityMode());
+			Menu_DrawItem(20, 62, 0.45f, "パスワード:", "%s (%s)", display_info? passphrase : NULL, WiFi_GetSecurityMode());
 
 		if ((R_SUCCEEDED(CFG_GetConfigInfoBlk8(CFG_WIFI_SLOT_SIZE, CFG_WIFI_BLKID, (u8*)&slotData))) && (slotData.set))
 		{
 			if (display_info)
-				Menu_DrawItem(20, 78, 0.45f, "Mac address:", "%02X:%02X:%02X:%02X:%02X:%02X", slotData.mac_addr[0], slotData.mac_addr[1], slotData.mac_addr[2], 
+				Menu_DrawItem(20, 78, 0.45f, "Macアドレス:", "%02X:%02X:%02X:%02X:%02X:%02X", slotData.mac_addr[0], slotData.mac_addr[1], slotData.mac_addr[2], 
 					slotData.mac_addr[3], slotData.mac_addr[4], slotData.mac_addr[5]);
 			else
-				Menu_DrawItem(20, 78, 0.45f, "Mac address:", NULL);
+				Menu_DrawItem(20, 78, 0.45f, "Macアドレス:", NULL);
 		}
 	}
 	
@@ -207,21 +206,21 @@ static void Menu_WiFi(void)
 		Draw_Rect(15, 95, 370, 70, MENU_INFO_TITLE_COLOUR);
 		Draw_Rect(16, 96, 368, 68, MENU_BAR_COLOUR);
 		
-		Draw_Text(20, 98, 0.45f, MENU_INFO_DESC_COLOUR, "WiFi Slot 2:");
+		Draw_Text(20, 98, 0.45f, MENU_INFO_DESC_COLOUR, "WiFiスロット 2:");
 
 		if (R_SUCCEEDED(ACI_GetSSID(ssid)))
 			Menu_DrawItem(20, 114, 0.45f, "SSID:", ssid);
 		
 		if (R_SUCCEEDED(ACI_GetPassphrase(passphrase)))
-			Menu_DrawItem(20, 130, 0.45f, "Pass:", "%s (%s)", display_info? passphrase : NULL, WiFi_GetSecurityMode());
+			Menu_DrawItem(20, 130, 0.45f, "パスワード:", "%s (%s)", display_info? passphrase : NULL, WiFi_GetSecurityMode());
 
 		if ((R_SUCCEEDED(CFG_GetConfigInfoBlk8(CFG_WIFI_SLOT_SIZE, CFG_WIFI_BLKID + 1, (u8*)&slotData))) && (slotData.set))
 		{
 			if (display_info)
-				Menu_DrawItem(20, 146, 0.45f, "Mac address:", "%02X:%02X:%02X:%02X:%02X:%02X", slotData.mac_addr[0], slotData.mac_addr[1], slotData.mac_addr[2], 
+				Menu_DrawItem(20, 146, 0.45f, "Macアドレス:", "%02X:%02X:%02X:%02X:%02X:%02X", slotData.mac_addr[0], slotData.mac_addr[1], slotData.mac_addr[2], 
 					slotData.mac_addr[3], slotData.mac_addr[4], slotData.mac_addr[5]);
 			else
-				Menu_DrawItem(20, 146, 0.45f, "Mac address:", NULL);
+				Menu_DrawItem(20, 146, 0.45f, "Macアドレス:", NULL);
 		}
 	}
 	
@@ -230,21 +229,21 @@ static void Menu_WiFi(void)
 		Draw_Rect(15, 163, 370, 70, MENU_INFO_TITLE_COLOUR);
 		Draw_Rect(16, 164, 368, 68, MENU_BAR_COLOUR);
 		
-		Draw_Text(20, 166, 0.45f, MENU_INFO_DESC_COLOUR, "WiFi Slot 3:");
+		Draw_Text(20, 166, 0.45f, MENU_INFO_DESC_COLOUR, "WiFiスロット 3:");
 
 		if (R_SUCCEEDED(ACI_GetSSID(ssid)))
 			Menu_DrawItem(20, 182, 0.45f, "SSID:", ssid);
 		
 		if (R_SUCCEEDED(ACI_GetPassphrase(passphrase)))
-			Menu_DrawItem(20, 198, 0.45f, "Pass:", "%s (%s)", display_info? passphrase : NULL, WiFi_GetSecurityMode());
+			Menu_DrawItem(20, 198, 0.45f, "パスワード:", "%s (%s)", display_info? passphrase : NULL, WiFi_GetSecurityMode());
 
 		if ((R_SUCCEEDED(CFG_GetConfigInfoBlk8(CFG_WIFI_SLOT_SIZE, CFG_WIFI_BLKID + 2, (u8*)&slotData))) && (slotData.set))
 		{
 			if (display_info)
-				Menu_DrawItem(20, 214, 0.45f, "Mac address:", "%02X:%02X:%02X:%02X:%02X:%02X", slotData.mac_addr[0], slotData.mac_addr[1], slotData.mac_addr[2], 
+				Menu_DrawItem(20, 214, 0.45f, "Macアドレス:", "%02X:%02X:%02X:%02X:%02X:%02X", slotData.mac_addr[0], slotData.mac_addr[1], slotData.mac_addr[2], 
 					slotData.mac_addr[3], slotData.mac_addr[4], slotData.mac_addr[5]);
 			else
-				Menu_DrawItem(20, 214, 0.45f, "Mac address:", NULL);
+				Menu_DrawItem(20, 214, 0.45f, "Macアドレス:", NULL);
 		}
 	}
 }
@@ -275,47 +274,43 @@ static void Menu_Storage(void)
 
 	sdUsed = Storage_GetUsedStorage(SYSTEM_MEDIATYPE_SD);
 	sdTotal = Storage_GetTotalStorage(SYSTEM_MEDIATYPE_SD);
-	Draw_Rect(20, 105, 60, 10, MENU_INFO_TITLE_COLOUR);
-	Draw_Rect(21, 106, 58, 8, BACKGROUND_COLOUR);
-	Draw_Rect(21, 106, (((double)sdUsed / (double)sdTotal) * 58.00), 8, MENU_SELECTOR_COLOUR);
-	Draw_Text(85, 50, 0.45f, MENU_INFO_DESC_COLOUR, "SD:");
-	Menu_DrawItem(85, 71, 0.45f, "Free:", sdFreeSize);
-	Menu_DrawItem(85, 87, 0.45f, "Used:", sdUsedSize);
-	Menu_DrawItem(85, 103, 0.45f, "Total:", sdTotalSize);
-	Draw_Image(drive_icon, 20, 40);
+	Draw_Rect(20, 50, 60, 10, MENU_INFO_TITLE_COLOUR);
+	Draw_Rect(21, 51, 58, 8, BACKGROUND_COLOUR);
+	Draw_Rect(21, 51, (((double)sdUsed / (double)sdTotal) * 58.00), 8, MENU_SELECTOR_COLOUR);
+	Draw_Text(20, 34, 0.45f, MENU_INFO_DESC_COLOUR, "SD");
+	Menu_DrawItem(20, 71, 0.45f, "残量:", sdFreeSize);
+	Menu_DrawItem(20, 87, 0.45f, "使用中:", sdUsedSize);
+	Menu_DrawItem(20, 103, 0.45f, "総容量:", sdTotalSize);
 
 	ctrUsed = Storage_GetUsedStorage(SYSTEM_MEDIATYPE_CTR_NAND);
 	ctrTotal = Storage_GetTotalStorage(SYSTEM_MEDIATYPE_CTR_NAND);
-	Draw_Rect(220, 105, 60, 10, MENU_INFO_TITLE_COLOUR);
-	Draw_Rect(221, 106, 58, 8, BACKGROUND_COLOUR);
-	Draw_Rect(221, 106, (((double)ctrUsed / (double)ctrTotal) * 58.00), 8, MENU_SELECTOR_COLOUR);
-	Draw_Text(285, 50, 0.45f, MENU_INFO_DESC_COLOUR, "CTR Nand:");
-	Menu_DrawItem(285, 71, 0.45f, "Free:", ctrFreeSize);
-	Menu_DrawItem(285, 87, 0.45f, "Used:", ctrUsedSize);
-	Menu_DrawItem(285, 103, 0.45f, "Total:", ctrTotalSize);
-	Draw_Image(drive_icon, 220, 40);
+	Draw_Rect(220, 50, 60, 10, MENU_INFO_TITLE_COLOUR);
+	Draw_Rect(221, 51, 58, 8, BACKGROUND_COLOUR);
+	Draw_Rect(221, 51, (((double)ctrUsed / (double)ctrTotal) * 58.00), 8, MENU_SELECTOR_COLOUR);
+	Draw_Text(220, 34, 0.45f, MENU_INFO_DESC_COLOUR, "CTR NAND");
+	Menu_DrawItem(220, 71, 0.45f, "残量:", ctrFreeSize);
+	Menu_DrawItem(220, 87, 0.45f, "使用中:", ctrUsedSize);
+	Menu_DrawItem(220, 103, 0.45f, "総容量:", ctrTotalSize);
 
 	twlUsed = Storage_GetUsedStorage(SYSTEM_MEDIATYPE_TWL_NAND);
 	twlTotal = Storage_GetTotalStorage(SYSTEM_MEDIATYPE_TWL_NAND);
-	Draw_Rect(20, 200, 60, 10, MENU_INFO_TITLE_COLOUR);
-	Draw_Rect(21, 201, 58, 8, BACKGROUND_COLOUR);
-	Draw_Rect(21, 201, (((double)twlUsed / (double)twlTotal) * 58.00), 8, MENU_SELECTOR_COLOUR);
-	Draw_Text(85, 145, 0.45f, MENU_INFO_DESC_COLOUR, "TWL Nand:");
-	Menu_DrawItem(85, 166, 0.45f, "Free:", twlFreeSize);
-	Menu_DrawItem(85, 182, 0.45f, "Used:", twlUsedSize);
-	Menu_DrawItem(85, 198, 0.45f, "Total:", twlTotalSize);
-	Draw_Image(drive_icon, 20, 135);
+	Draw_Rect(20, 145, 60, 10, MENU_INFO_TITLE_COLOUR);
+	Draw_Rect(21, 146, 58, 8, BACKGROUND_COLOUR);
+	Draw_Rect(21, 146, (((double)twlUsed / (double)twlTotal) * 58.00), 8, MENU_SELECTOR_COLOUR);
+	Draw_Text(20, 129, 0.45f, MENU_INFO_DESC_COLOUR, "TWL NAND");
+	Menu_DrawItem(20, 166, 0.45f, "残量:", twlFreeSize);
+	Menu_DrawItem(20, 182, 0.45f, "使用中:", twlUsedSize);
+	Menu_DrawItem(20, 198, 0.45f, "総容量:", twlTotalSize);
 
 	twlpUsed = Storage_GetUsedStorage(SYSTEM_MEDIATYPE_TWL_PHOTO);
 	twlpTotal = Storage_GetTotalStorage(SYSTEM_MEDIATYPE_TWL_PHOTO);
-	Draw_Rect(220, 200, 60, 10, MENU_INFO_TITLE_COLOUR);
-	Draw_Rect(221, 201, 58, 8, BACKGROUND_COLOUR);
-	Draw_Rect(221, 201, (((double)twlpUsed / (double)twlpTotal) * 58.00), 8, MENU_SELECTOR_COLOUR);
-	Draw_Text(285, 145, 0.45f, MENU_INFO_DESC_COLOUR, "TWL Photo:");
-	Menu_DrawItem(285, 166, 0.45f, "Free:", twlpFreeSize);
-	Menu_DrawItem(285, 182, 0.45f, "Used:", twlpUsedSize);
-	Menu_DrawItem(285, 198, 0.45f, "Total:", twlpTotalSize);
-	Draw_Image(drive_icon, 220, 135);
+	Draw_Rect(220, 145, 60, 10, MENU_INFO_TITLE_COLOUR);
+	Draw_Rect(221, 146, 58, 8, BACKGROUND_COLOUR);
+	Draw_Rect(221, 146, (((double)twlpUsed / (double)twlpTotal) * 58.00), 8, MENU_SELECTOR_COLOUR);
+	Draw_Text(220, 129, 0.45f, MENU_INFO_DESC_COLOUR, "TWL Photo");
+	Menu_DrawItem(220, 166, 0.45f, "残量:", twlpFreeSize);
+	Menu_DrawItem(220, 182, 0.45f, "使用中:", twlpUsedSize);
+	Menu_DrawItem(220, 198, 0.45f, "総容量:", twlpTotalSize);
 }
 
 static int touchButton(touchPosition *touch, int selection)
@@ -361,8 +356,8 @@ void Menu_Main(void)
 	tickets = Misc_TicketCount();
 
 	float instr_width = 0.0f, instr_width2 = 0.0f, instr_height = 0.0f;
-	Draw_GetTextSize(0.5f, &instr_width, &instr_height, "Press select to hide user-specific info.");
-	Draw_GetTextSize(0.5f, &instr_width2, NULL, "Press START + SELECT to use button tester.");
+	Draw_GetTextSize(0.5f, &instr_width, &instr_height, "SELECT： ユーザー固有情報を非表示");
+	Draw_GetTextSize(0.5f, &instr_width2, NULL, "START + SELECT： ボタンテスター");
 
 	while (aptMainLoop()) 
 	{
@@ -372,9 +367,7 @@ void Menu_Main(void)
 		C2D_SceneBegin(RENDER_TOP);
 
 		Draw_Rect(0, 0, 400, 20, STATUS_BAR_COLOUR);
-		Draw_Textf(5, (20 - Draw_GetTextHeight(0.5f, "3DSident v0.0.0"))/2, 0.5f, BACKGROUND_COLOUR, "3DSident v%d.%d.%d", VERSION_MAJOR, VERSION_MINOR, VERSION_MICRO);
-
-		Draw_Image(banner, (400 - banner.subtex->width) / 2, ((82 - banner.subtex->height) / 2) + 20);
+		Draw_Textf(5, (20 - Draw_GetTextHeight(0.5f, "3DSident_JPN v0.8.0"))/2, 0.5f, BACKGROUND_COLOUR, "3DSident_JPN v%d.%d.%d", VERSION_MAJOR, VERSION_MINOR, VERSION_MICRO);
 
 		switch(selection)
 		{
@@ -405,28 +398,23 @@ void Menu_Main(void)
 			case 8:
 				Menu_Misc();
 				break;
-			case 9:
-				Draw_Text((400 - instr_width) / 2, ((240 - instr_height) / 2) + 18, 0.5f, MENU_INFO_TITLE_COLOUR, "Press select to hide user-specific info.");
-				Draw_Text((400 - instr_width2) / 2, ((240 - instr_height) / 2) + 36, 0.5f, MENU_INFO_TITLE_COLOUR, "Press START + SELECT to use button tester.");
-				break;
 		}
 
 		C2D_SceneBegin(RENDER_BOTTOM);
 
-		Draw_Rect(15, 15, 290, 210, MENU_INFO_TITLE_COLOUR);
-		Draw_Rect(16, 16, 288, 208, MENU_BAR_COLOUR);
+		Draw_Rect(15, 15, 290, 190, MENU_INFO_TITLE_COLOUR);
+		Draw_Rect(16, 16, 288, 188, MENU_BAR_COLOUR);
 		Draw_Rect(16, 16 + (DISTANCE_Y * selection), 288, 18, MENU_SELECTOR_COLOUR);
 
-		Draw_Text(22, 18, 0.5f, selection == 0? ITEM_SELECTED_COLOUR : ITEM_COLOUR, "Kernel");
-		Draw_Text(22, 38, 0.5f, selection == 1? ITEM_SELECTED_COLOUR : ITEM_COLOUR, "System");
-		Draw_Text(22, 58, 0.5f, selection == 2? ITEM_SELECTED_COLOUR : ITEM_COLOUR, "Battery");
+		Draw_Text(22, 18, 0.5f, selection == 0? ITEM_SELECTED_COLOUR : ITEM_COLOUR, "カーネル");
+		Draw_Text(22, 38, 0.5f, selection == 1? ITEM_SELECTED_COLOUR : ITEM_COLOUR, "システム");
+		Draw_Text(22, 58, 0.5f, selection == 2? ITEM_SELECTED_COLOUR : ITEM_COLOUR, "バッテリー");
 		Draw_Text(22, 78, 0.5f, selection == 3? ITEM_SELECTED_COLOUR : ITEM_COLOUR, "NNID");
-		Draw_Text(22, 98, 0.5f, selection == 4? ITEM_SELECTED_COLOUR : ITEM_COLOUR, "Config");
-		Draw_Text(22, 118, 0.5f, selection == 5? ITEM_SELECTED_COLOUR : ITEM_COLOUR, "Hardware");
+		Draw_Text(22, 98, 0.5f, selection == 4? ITEM_SELECTED_COLOUR : ITEM_COLOUR, "構成情報");
+		Draw_Text(22, 118, 0.5f, selection == 5? ITEM_SELECTED_COLOUR : ITEM_COLOUR, "ハードウェア");
 		Draw_Text(22, 138, 0.5f, selection == 6? ITEM_SELECTED_COLOUR : ITEM_COLOUR, "WiFi");
-		Draw_Text(22, 158, 0.5f, selection == 7? ITEM_SELECTED_COLOUR : ITEM_COLOUR, "Storage");
-		Draw_Text(22, 178, 0.5f, selection == 8? ITEM_SELECTED_COLOUR : ITEM_COLOUR, "Miscellaneous");
-		Draw_Text(22, 198, 0.5f, selection == 9? ITEM_SELECTED_COLOUR : ITEM_COLOUR, "Exit");
+		Draw_Text(22, 158, 0.5f, selection == 7? ITEM_SELECTED_COLOUR : ITEM_COLOUR, "ストレージ");
+		Draw_Text(22, 178, 0.5f, selection == 8? ITEM_SELECTED_COLOUR : ITEM_COLOUR, "その他");
 
 		Draw_EndFrame();
 
@@ -449,16 +437,9 @@ void Menu_Main(void)
 
 		if (kDown & KEY_SELECT)
 			display_info = !display_info;
-
-		if (((kHeld & KEY_START) && (kDown & KEY_SELECT)) || ((kHeld & KEY_SELECT) && (kDown & KEY_START)))
-			MENU_STATE_CONTROLS = true;
+		
+		if (kDown & KEY_START) break;
 
 		Menu_Controls();
-
-		if (kDown & KEY_A)
-		{
-			if (selection == 9)
-				longjmp(exitJmp, 1);
-		}
 	}
 }
