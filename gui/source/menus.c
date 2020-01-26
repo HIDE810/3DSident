@@ -43,6 +43,8 @@ static void Menu_DrawItem(int x, int y, float size, char *item_title, const char
 
 static void Menu_Kernel(void)
 {
+	Draw_Rect(10, 27, 380, 146, MENU_INFO_TITLE_COLOUR);
+	Draw_Rect(11, 28, 378, 144, MENU_BAR_COLOUR);
 	Menu_DrawItem(15, 30, 0.5f, "カーネルバージョン:", kernel_version);
 	Menu_DrawItem(15, 50, 0.5f, "FIRMバージョン:", firm_version);
 	Menu_DrawItem(15, 70, 0.5f, "システムバージョン:", system_version);
@@ -54,6 +56,8 @@ static void Menu_Kernel(void)
 
 static void Menu_System(void)
 {
+	Draw_Rect(10, 27, 380, 146, MENU_INFO_TITLE_COLOUR);
+	Draw_Rect(11, 28, 378, 144, MENU_BAR_COLOUR);
 	Menu_DrawItem(15, 30, 0.5f, "モデル:", "%s (%s - %s)", System_GetModel(), System_GetRunningHW(), System_GetRegion());
 	Menu_DrawItem(15, 50, 0.5f, "言語:", System_GetLang());
 	Menu_DrawItem(15, 70, 0.5f, "ECSデバイスID:", "%llu", display_info? System_GetSoapId() : 0);
@@ -65,6 +69,9 @@ static void Menu_System(void)
 
 static void Menu_Battery(void)
 {
+	Draw_Rect(10, 27, 380, 126, MENU_INFO_TITLE_COLOUR);
+	Draw_Rect(11, 28, 378, 124, MENU_BAR_COLOUR);
+	
 	Result ret = 0;
 	u8 battery_percent = 0, battery_status = 0, battery_volt = 0, fw_ver_high = 0, fw_ver_low = 0;
 	bool is_connected = false;
@@ -93,6 +100,9 @@ static void Menu_Battery(void)
 
 static void Menu_NNID(void)
 {
+	Draw_Rect(10, 27, 380, 126, MENU_INFO_TITLE_COLOUR);
+	Draw_Rect(11, 28, 378, 124, MENU_BAR_COLOUR);
+	
 	Result ret = 0;
 	AccountDataBlock accountDataBlock;
 	Result accountDataBlockRet = ACTU_GetAccountDataBlock((u8*)&accountDataBlock, 0xA0, 0x11);
@@ -118,19 +128,25 @@ static void Menu_NNID(void)
 
 static void Menu_Config(void)
 {
+	Draw_Rect(10, 27, 380, 126, MENU_INFO_TITLE_COLOUR);
+	Draw_Rect(11, 28, 378, 124, MENU_BAR_COLOUR);
+	
 	char username[0x14];
 	wcstombs(username, Config_GetUsername(), sizeof(username));
 
 	Menu_DrawItem(15, 30, 0.5f, "ユーザー名: ", username);
 	Menu_DrawItem(15, 50, 0.5f, "誕生日:", display_info? Config_GetBirthday() : NULL);
 	Menu_DrawItem(15, 70, 0.5f, "EULAバージョン:", Config_GetEulaVersion());
-	Menu_DrawItem(15, 90, 0.5f, "ペアレンタルコントロール キー:", display_info? Config_GetParentalPin() : NULL);
-	Menu_DrawItem(15, 110, 0.5f, "ペアレンタルコントロール メールアドレス:", display_info? Config_GetParentalEmail() : NULL);
-	Menu_DrawItem(15, 130, 0.5f, "ペアレンタルコントロール 秘密の質問の答え:", display_info? Config_GetParentalSecretAnswer() : NULL);
+	Menu_DrawItem(15, 90, 0.5f, "ペアレンタルコントロールキー:", display_info? Config_GetParentalPin() : NULL);
+	Menu_DrawItem(15, 110, 0.5f, "メールアドレス:", display_info? Config_GetParentalEmail() : NULL);
+	Menu_DrawItem(15, 130, 0.5f, "秘密の質問の答え:", display_info? Config_GetParentalSecretAnswer() : NULL);
 }
 
 static void Menu_Hardware(void)
 {
+	Draw_Rect(10, 27, 380, 126, MENU_INFO_TITLE_COLOUR);
+	Draw_Rect(11, 28, 378, 124, MENU_BAR_COLOUR);
+	
 	Result ret = 0;
 
 	Menu_DrawItem(15, 30, 0.5f, "スクリーンタイプ:", System_GetScreenType());
@@ -151,6 +167,9 @@ static void Menu_Hardware(void)
 
 static void Menu_Misc(void)
 {
+	Draw_Rect(10, 27, 380, 106, MENU_INFO_TITLE_COLOUR);
+	Draw_Rect(11, 28, 378, 104, MENU_BAR_COLOUR);
+	
 	Result ret = 0;
 	Menu_DrawItem(15, 30, 0.5f, "インストール済タイトル:", "SD: %lu (NAND: %lu)", sd_titles, nand_titles);
 	Menu_DrawItem(15, 50, 0.5f, "インストール済チケット:", "%lu", tickets);
@@ -274,8 +293,10 @@ static void Menu_Storage(void)
 
 	sdUsed = Storage_GetUsedStorage(SYSTEM_MEDIATYPE_SD);
 	sdTotal = Storage_GetTotalStorage(SYSTEM_MEDIATYPE_SD);
+	Draw_Rect(15, 31, 185, 95, MENU_INFO_TITLE_COLOUR);
+	Draw_Rect(16, 32, 183, 93, MENU_BAR_COLOUR);
 	Draw_Rect(20, 50, 60, 10, MENU_INFO_TITLE_COLOUR);
-	Draw_Rect(21, 51, 58, 8, BACKGROUND_COLOUR);
+	Draw_Rect(21, 51, 58, 8, MENU_BAR_COLOUR);
 	Draw_Rect(21, 51, (((double)sdUsed / (double)sdTotal) * 58.00), 8, MENU_SELECTOR_COLOUR);
 	Draw_Text(20, 34, 0.45f, MENU_INFO_DESC_COLOUR, "SD");
 	Menu_DrawItem(20, 71, 0.45f, "残量:", sdFreeSize);
@@ -284,18 +305,22 @@ static void Menu_Storage(void)
 
 	ctrUsed = Storage_GetUsedStorage(SYSTEM_MEDIATYPE_CTR_NAND);
 	ctrTotal = Storage_GetTotalStorage(SYSTEM_MEDIATYPE_CTR_NAND);
-	Draw_Rect(220, 50, 60, 10, MENU_INFO_TITLE_COLOUR);
-	Draw_Rect(221, 51, 58, 8, BACKGROUND_COLOUR);
-	Draw_Rect(221, 51, (((double)ctrUsed / (double)ctrTotal) * 58.00), 8, MENU_SELECTOR_COLOUR);
-	Draw_Text(220, 34, 0.45f, MENU_INFO_DESC_COLOUR, "CTR NAND");
-	Menu_DrawItem(220, 71, 0.45f, "残量:", ctrFreeSize);
-	Menu_DrawItem(220, 87, 0.45f, "使用中:", ctrUsedSize);
-	Menu_DrawItem(220, 103, 0.45f, "総容量:", ctrTotalSize);
+	Draw_Rect(200, 31, 185, 95, MENU_INFO_TITLE_COLOUR);
+	Draw_Rect(201, 32, 183, 93, MENU_BAR_COLOUR);
+	Draw_Rect(205, 50, 60, 10, MENU_INFO_TITLE_COLOUR);
+	Draw_Rect(206, 51, 58, 8, MENU_BAR_COLOUR);
+	Draw_Rect(206, 51, (((double)ctrUsed / (double)ctrTotal) * 58.00), 8, MENU_SELECTOR_COLOUR);
+	Draw_Text(205, 34, 0.45f, MENU_INFO_DESC_COLOUR, "CTR NAND");
+	Menu_DrawItem(205, 71, 0.45f, "残量:", ctrFreeSize);
+	Menu_DrawItem(205, 87, 0.45f, "使用中:", ctrUsedSize);
+	Menu_DrawItem(205, 103, 0.45f, "総容量:", ctrTotalSize);
 
 	twlUsed = Storage_GetUsedStorage(SYSTEM_MEDIATYPE_TWL_NAND);
 	twlTotal = Storage_GetTotalStorage(SYSTEM_MEDIATYPE_TWL_NAND);
+	Draw_Rect(15, 126, 185, 95, MENU_INFO_TITLE_COLOUR);
+	Draw_Rect(16, 127, 183, 93, MENU_BAR_COLOUR);
 	Draw_Rect(20, 145, 60, 10, MENU_INFO_TITLE_COLOUR);
-	Draw_Rect(21, 146, 58, 8, BACKGROUND_COLOUR);
+	Draw_Rect(21, 146, 58, 8, MENU_BAR_COLOUR);
 	Draw_Rect(21, 146, (((double)twlUsed / (double)twlTotal) * 58.00), 8, MENU_SELECTOR_COLOUR);
 	Draw_Text(20, 129, 0.45f, MENU_INFO_DESC_COLOUR, "TWL NAND");
 	Menu_DrawItem(20, 166, 0.45f, "残量:", twlFreeSize);
@@ -304,13 +329,15 @@ static void Menu_Storage(void)
 
 	twlpUsed = Storage_GetUsedStorage(SYSTEM_MEDIATYPE_TWL_PHOTO);
 	twlpTotal = Storage_GetTotalStorage(SYSTEM_MEDIATYPE_TWL_PHOTO);
-	Draw_Rect(220, 145, 60, 10, MENU_INFO_TITLE_COLOUR);
-	Draw_Rect(221, 146, 58, 8, BACKGROUND_COLOUR);
-	Draw_Rect(221, 146, (((double)twlpUsed / (double)twlpTotal) * 58.00), 8, MENU_SELECTOR_COLOUR);
-	Draw_Text(220, 129, 0.45f, MENU_INFO_DESC_COLOUR, "TWL Photo");
-	Menu_DrawItem(220, 166, 0.45f, "残量:", twlpFreeSize);
-	Menu_DrawItem(220, 182, 0.45f, "使用中:", twlpUsedSize);
-	Menu_DrawItem(220, 198, 0.45f, "総容量:", twlpTotalSize);
+	Draw_Rect(200, 126, 185, 95, MENU_INFO_TITLE_COLOUR);
+	Draw_Rect(201, 127, 183, 93, MENU_BAR_COLOUR);
+	Draw_Rect(205, 145, 60, 10, MENU_INFO_TITLE_COLOUR);
+	Draw_Rect(206, 146, 58, 8, MENU_BAR_COLOUR);
+	Draw_Rect(206, 146, (((double)twlpUsed / (double)twlpTotal) * 58.00), 8, MENU_SELECTOR_COLOUR);
+	Draw_Text(205, 129, 0.45f, MENU_INFO_DESC_COLOUR, "TWL Photo");
+	Menu_DrawItem(205, 166, 0.45f, "残量:", twlpFreeSize);
+	Menu_DrawItem(205, 182, 0.45f, "使用中:", twlpUsedSize);
+	Menu_DrawItem(205, 198, 0.45f, "総容量:", twlpTotalSize);
 }
 
 static int touchButton(touchPosition *touch, int selection)
@@ -355,10 +382,6 @@ void Menu_Main(void)
 	nand_titles = Misc_TitleCount(MEDIATYPE_NAND);
 	tickets = Misc_TicketCount();
 
-	float instr_width = 0.0f, instr_width2 = 0.0f, instr_height = 0.0f;
-	Draw_GetTextSize(0.5f, &instr_width, &instr_height, "SELECT： ユーザー固有情報を非表示");
-	Draw_GetTextSize(0.5f, &instr_width2, NULL, "START + SELECT： ボタンテスター");
-
 	while (aptMainLoop()) 
 	{
 		C3D_FrameBegin(C3D_FRAME_SYNCDRAW);
@@ -402,8 +425,8 @@ void Menu_Main(void)
 
 		C2D_SceneBegin(RENDER_BOTTOM);
 
-		Draw_Rect(15, 15, 290, 190, MENU_INFO_TITLE_COLOUR);
-		Draw_Rect(16, 16, 288, 188, MENU_BAR_COLOUR);
+		Draw_Rect(15, 15, 290, 180, MENU_INFO_TITLE_COLOUR);
+		Draw_Rect(16, 16, 288, 178, MENU_BAR_COLOUR);
 		Draw_Rect(16, 16 + (DISTANCE_Y * selection), 288, 18, MENU_SELECTOR_COLOUR);
 
 		Draw_Text(22, 18, 0.5f, selection == 0? ITEM_SELECTED_COLOUR : ITEM_COLOUR, "カーネル");
@@ -415,6 +438,10 @@ void Menu_Main(void)
 		Draw_Text(22, 138, 0.5f, selection == 6? ITEM_SELECTED_COLOUR : ITEM_COLOUR, "WiFi");
 		Draw_Text(22, 158, 0.5f, selection == 7? ITEM_SELECTED_COLOUR : ITEM_COLOUR, "ストレージ");
 		Draw_Text(22, 178, 0.5f, selection == 8? ITEM_SELECTED_COLOUR : ITEM_COLOUR, "その他");
+		
+		Draw_Rect(15, 202, 290, 22, MENU_INFO_TITLE_COLOUR);
+		Draw_Rect(16, 203, 288, 20, MENU_BAR_COLOUR);
+		Draw_Text(22, 205, 0.5f, ITEM_COLOUR, "SELECT:ユーザー固有情報非表示 | START:終了");
 
 		Draw_EndFrame();
 
