@@ -31,16 +31,16 @@ include $(DEVKITARM)/3ds_rules
 #     - icon.png
 #     - <libctru folder>/default_icon.png
 #---------------------------------------------------------------------------------
-TARGET		:= 3DSident-GUI
+TARGET		:= 3DSident-GUI_JPN
 BUILD		:= build
 SOURCES     := source ../common ../services
 DATA        := data
 INCLUDES    := include ../common ../services
 ROMFS		:= romfs
 
-APP_TITLE           :=	3DSident-GUI
+APP_TITLE           :=	3DSident-GUI_JPN
 APP_DESCRIPTION     :=	Identity tool for the Nintendo 3DS.
-APP_AUTHOR          :=	Joel16
+APP_AUTHOR          :=	HIDE810
 VERSION_MAJOR       :=  0
 VERSION_MINOR       :=  8
 VERSION_MICRO       :=  0
@@ -206,6 +206,7 @@ all: $(BUILD) $(GFXBUILD) $(DEPSDIR) $(ROMFS_T3XFILES) $(T3XHFILES)
 	@$(BANNERTOOL) makebanner $(BANNER_IMAGE_ARG) "$(BANNER_IMAGE)" $(BANNER_AUDIO_ARG) "$(BANNER_AUDIO)" -o "$(BUILD)/banner.bnr"
 	@$(BANNERTOOL) makesmdh -s "$(APP_TITLE)" -l "$(APP_DESCRIPTION)" -p "$(APP_AUTHOR)" -i "$(APP_ICON)" -f "$(ICON_FLAGS)" -o "$(BUILD)/icon.icn"
 	@$(MAKEROM) -f cia -o "$(TARGET).cia" -target t -exefslogo $(MAKEROM_ARGS)
+	@echo Built $(TARGET).cia
 
 $(BUILD):
 	@mkdir -p $@
