@@ -10,11 +10,9 @@
 #include "config.h"
 #include "hardware.h"
 #include "kernel.h"
-#include "menu_control.h"
 #include "misc.h"
 #include "storage.h"
 #include "system.h"
-#include "textures.h"
 #include "utils.h"
 #include "wifi.h"
 
@@ -466,7 +464,5 @@ void Menu_Main(void)
 			display_info = !display_info;
 		
 		if (kDown & KEY_START) break;
-
-		Menu_Controls();
 	}
 }

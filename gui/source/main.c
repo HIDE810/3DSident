@@ -7,7 +7,6 @@
 #include "common.h"
 #include "menus.h"
 #include "sprites.h"
-#include "textures.h"
 #include "utils.h"
 
 static u32 cpu_time_limit = 0;
@@ -42,14 +41,10 @@ static void Init_Services(void)
 
 	RENDER_TOP = C2D_CreateScreenTarget(GFX_TOP, GFX_LEFT);
 	RENDER_BOTTOM = C2D_CreateScreenTarget(GFX_BOTTOM, GFX_LEFT);
-
-	Textures_Load();
 }
 
 static void Term_Services(void)
 {
-	Textures_Free();
-
 	C2D_TextBufDelete(sizeBuf);
 	C2D_TextBufDelete(dynamicBuf);
 	C2D_TextBufDelete(staticBuf);

@@ -36,9 +36,7 @@ BUILD		:= build
 SOURCES     := source ../common ../services
 DATA        := data
 INCLUDES    := include ../common ../services
-GRAPHICS	:= res/drawable
 ROMFS		:= romfs
-GFXBUILD	:= $(ROMFS)/res/drawable
 
 APP_TITLE           :=	3DSident-GUI
 APP_DESCRIPTION     :=	Identity tool for the Nintendo 3DS.
@@ -46,7 +44,7 @@ APP_AUTHOR          :=	Joel16
 VERSION_MAJOR       :=  0
 VERSION_MINOR       :=  8
 VERSION_MICRO       :=  0
-ICON                :=	res/drawable/icon.png
+ICON                :=	res/icon.png
 
 # CIA
 BANNER_AUDIO        :=	res/banner.wav
